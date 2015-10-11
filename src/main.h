@@ -25,6 +25,8 @@ static const int64_t DARKSEND_COLLATERAL = (10000*COIN);
 static const int64_t DARKSEND_FEE = (0.0001*COIN);
 static const int64_t DARKSEND_POOL_MAX = (100000.99*COIN);
 static const int64_t STATIC_POS_REWARD = 1 * COIN; //Constant reward of 1 TX per COIN i.e. 8% 
+static const int64_t TARGET_SPACING_FORK = 60;
+static const int64_t TARGET_SPACING = 69;
 
 
 /*
@@ -1079,15 +1081,6 @@ public:
     bool IsProofOfStake() const
     {
         return (nFlags & BLOCK_PROOF_OF_STAKE);
-    }
-
-    bool Spacing() const
-    {
-        if (nHeight <= 85000){
-            return static const int64_t TARGET_SPACING = 60;
-        } else {
-            return static const int64_t TARGET_SPACING = 69;
-        }
     }
 
     void SetProofOfStake()
