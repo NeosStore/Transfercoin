@@ -1189,15 +1189,16 @@ void BitcoinGUI::updateWeight()
 void BitcoinGUI::updateStakingIcon()
 {
     updateWeight();
-
+    
     if (nLastCoinStakeSearchInterval && nWeight)
     {
         uint64_t nWeight = this->nWeight;
         uint64_t nNetworkWeight = GetPoSKernelPS();
+        unsigned nEstimateTime = 0;
         if(pindexBest->nHeight <= HARD_FORK_BLOCK){
-            unsigned nEstimateTime = TARGET_SPACING_FORK * nNetworkWeight / nWeight;
+            nEstimateTime = TARGET_SPACING_FORK * nNetworkWeight / nWeight;
         } else {
-            unsigned nEstimateTime = TARGET_SPACING * nNetworkWeight / nWeight;
+            nEstimateTime = TARGET_SPACING * nNetworkWeight / nWeight;
         }
 
         QString text;
