@@ -1194,7 +1194,7 @@ void BitcoinGUI::updateStakingIcon()
     {
         uint64_t nWeight = this->nWeight;
         uint64_t nNetworkWeight = GetPoSKernelPS();
-        if(nHeight <= 85000){
+        if(pindex->nHeight <= 85000){
             unsigned nEstimateTime = TARGET_SPACING_FORK * nNetworkWeight / nWeight;
         } else {
             unsigned nEstimateTime = TARGET_SPACING * nNetworkWeight / nWeight;
