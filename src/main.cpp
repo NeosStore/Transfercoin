@@ -1166,11 +1166,11 @@ int64_t GetProofOfStakeReward(const CBlockIndex* pindexPrev, int64_t nCoinAge, i
 {
     int64_t nSubsidy = STATIC_POS_REWARD;
 
-    if(pindex->nHeight <= 15000)
+    if(nHeight <= 15000)
     {
         nSubsidy = 300 * COIN;
     }
-    else if(pindex->nHeight < 57000)
+    else if(nHeight < 57000)
     {
         nSubsidy = 15 * COIN;
     }
@@ -1203,7 +1203,7 @@ unsigned int GetNextTargetRequired(const CBlockIndex* pindexLast, bool fProofOfS
         return bnTargetLimit.GetCompact(); // second block
 
     int64_t nActualSpacing = pindexPrev->GetBlockTime() - pindexPrevPrev->GetBlockTime();
-    if(pindex->nHeight >= 85000 && nActualSpacing < TARGET_SPACING_FORK * 10){
+    if(nHeight >= 85000 && nActualSpacing < TARGET_SPACING_FORK * 10){
             nActualSpacing = TARGET_SPACING_FORK * 10;
     } else if(nActualSpacing < 0) {
         nActualSpacing = TARGET_SPACING;
@@ -1213,7 +1213,7 @@ unsigned int GetNextTargetRequired(const CBlockIndex* pindexLast, bool fProofOfS
     // ppcoin: retarget with exponential moving toward target spacing
     CBigNum bnNew;
     bnNew.SetCompact(pindexPrev->nBits);
-    if(pindex->nHeight >= 85000){
+    if(nHeight >= 85000){
         int64_t nInterval = nTargetTimespan / TARGET_SPACING_FORK;
         bnNew *= ((nInterval - 1) * TARGET_SPACING_FORK + nActualSpacing + nActualSpacing);
         bnNew /= ((nInterval + 1) * TARGET_SPACING_FORK);
@@ -2181,11 +2181,7 @@ bool CTransaction::GetCoinAge(CTxDB& txdb, const CBlockIndex* pindexPrev, uint64
             return false;  // Transaction timestamp violation
 
         int nSpendDepth;
-        if(pindex->nHeight >= 85000){
-            int nStakeMinConfirmations = 1440;
-        } else {
-            int nStakeMinConfirmations = 1250;
-        }
+
         if (IsConfirmedInNPrevBlocks(txindex, pindexPrev, nStakeMinConfirmations - 1, nSpendDepth))
         {
             LogPrint("coinage", "coin age skip nSpendDepth=%d\n", nSpendDepth + 1);
@@ -2896,7 +2892,7 @@ bool LoadBlockIndex(bool fAllowNew)
 
     if (TestNet())
     {
-        int nStakeMinConfirmations = 10;
+        nStakeMinConfirmations = 10;
         nCoinbaseMaturity = 10; // test maturity is 10 blocks
     }
 
