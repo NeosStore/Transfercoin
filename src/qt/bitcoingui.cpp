@@ -17,8 +17,14 @@
 #include "aboutdialog.h"
 #include "clientmodel.h"
 #include "walletmodel.h"
+
 #include "db.h"
 #include "main.h"
+#include "kernel.h"
+#include "net.h"
+#include "txdb.h"
+#include "txmempool.h"
+
 #include "editaddressdialog.h"
 #include "optionsmodel.h"
 #include "transactiondescdialog.h"
