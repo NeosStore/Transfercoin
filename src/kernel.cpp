@@ -128,7 +128,7 @@ bool ComputeNextStakeModifier(const CBlockIndex* pindexPrev, uint64_t& nStakeMod
     // Sort candidate blocks by timestamp
     vector<pair<int64_t, uint256> > vSortedByTimestamp;
 
-    if(nHeight <= 85000){
+    if(nHeight >= 85000){
         vSortedByTimestamp.reserve(64 * nModifierInterval / TARGET_SPACING_FORK);
     } else {
         vSortedByTimestamp.reserve(64 * nModifierInterval / TARGET_SPACING);
@@ -434,7 +434,11 @@ bool CheckProofOfStake(CBlockIndex* pindexPrev, const CTransaction& tx, unsigned
         return fDebug? error("CheckProofOfStake() : read block failed") : false; // unable to read block of previous transaction
 
     int nDepth;
-
+    if(nHeight >= 85000){
+        int nStakeMinConfirmations = 1440;
+    } else {
+        int nStakeMinConfirmations = 1250;
+    }
     if (IsConfirmedInNPrevBlocks(txindex, pindexPrev, nStakeMinConfirmations - 1, nDepth))
         return tx.DoS(100, error("CheckProofOfStake() : tried to stake at depth %d", nDepth + 1));
     

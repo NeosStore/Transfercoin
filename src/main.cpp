@@ -43,11 +43,7 @@ set<pair<COutPoint, unsigned int> > setStakeSeen;
 CBigNum bnProofOfStakeLimit(~uint256(0) >> 20);
 CBigNum bnProofOfStakeLimitV2(~uint256(0) >> 20);
 
-if(nHeight <= 85000){
-    int nStakeMinConfirmations = 1440;
-} else {
-    int nStakeMinConfirmations = 1250;
-}
+
 unsigned int nStakeMinAge = 24 * 60 * 60; // 24 hours
 unsigned int nModifierInterval = 2 * 60; // time to elapse before new modifier is computed
 
@@ -1207,7 +1203,7 @@ unsigned int GetNextTargetRequired(const CBlockIndex* pindexLast, bool fProofOfS
         return bnTargetLimit.GetCompact(); // second block
 
     int64_t nActualSpacing = pindexPrev->GetBlockTime() - pindexPrevPrev->GetBlockTime();
-    if(nHeight <= 85000 && nActualSpacing < TARGET_SPACING_FORK * 10){
+    if(nHeight >= 85000 && nActualSpacing < TARGET_SPACING_FORK * 10){
             nActualSpacing = TARGET_SPACING_FORK * 10;
     } else if(nActualSpacing < 0) {
         nActualSpacing = TARGET_SPACING;
@@ -1217,7 +1213,7 @@ unsigned int GetNextTargetRequired(const CBlockIndex* pindexLast, bool fProofOfS
     // ppcoin: retarget with exponential moving toward target spacing
     CBigNum bnNew;
     bnNew.SetCompact(pindexPrev->nBits);
-    if(nHeight <= 85000){
+    if(nHeight >= 85000){
         int64_t nInterval = nTargetTimespan / TARGET_SPACING_FORK;
         bnNew *= ((nInterval - 1) * TARGET_SPACING_FORK + nActualSpacing + nActualSpacing);
         bnNew /= ((nInterval + 1) * TARGET_SPACING_FORK);
