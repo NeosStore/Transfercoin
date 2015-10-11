@@ -10,6 +10,8 @@
 
 using namespace std;
 
+extern bool IsConfirmedInNPrevBlocks(const CTxIndex& txindex, const CBlockIndex* pindexFrom, int nMaxDepth, int& nActualDepth);
+
 // Get time weight
 int64_t GetWeight(int64_t nIntervalBeginning, int64_t nIntervalEnd)
 {
@@ -128,7 +130,7 @@ bool ComputeNextStakeModifier(const CBlockIndex* pindexPrev, uint64_t& nStakeMod
     // Sort candidate blocks by timestamp
     vector<pair<int64_t, uint256> > vSortedByTimestamp;
 
-    if(nHeight >= 85000){
+    if(pindexBest->nHeight >= HARD_FORK_BLOCK){
         vSortedByTimestamp.reserve(64 * nModifierInterval / TARGET_SPACING_FORK);
     } else {
         vSortedByTimestamp.reserve(64 * nModifierInterval / TARGET_SPACING);
@@ -411,6 +413,8 @@ bool CheckStakeKernelHash(CBlockIndex* pindexPrev, unsigned int nBits, const CBl
 // Check kernel hash target and coinstake signature
 bool CheckProofOfStake(CBlockIndex* pindexPrev, const CTransaction& tx, unsigned int nBits, uint256& hashProofOfStake, uint256& targetProofOfStake)
 {
+
+    int nStakeMinConfirmations = 0;
     if (!tx.IsCoinStake())
         return error("CheckProofOfStake() : called on non-coinstake %s", tx.GetHash().ToString());
 
@@ -434,11 +438,12 @@ bool CheckProofOfStake(CBlockIndex* pindexPrev, const CTransaction& tx, unsigned
         return fDebug? error("CheckProofOfStake() : read block failed") : false; // unable to read block of previous transaction
 
     int nDepth;
-    if(nHeight >= 85000){
-        int nStakeMinConfirmations = 1440;
+    if(pindexBest->nHeight >= HARD_FORK_BLOCK){
+        nStakeMinConfirmations = 1440;
     } else {
-        int nStakeMinConfirmations = 1250;
+        nStakeMinConfirmations = 1250;
     }
+
     if (IsConfirmedInNPrevBlocks(txindex, pindexPrev, nStakeMinConfirmations - 1, nDepth))
         return tx.DoS(100, error("CheckProofOfStake() : tried to stake at depth %d", nDepth + 1));
     
@@ -473,6 +478,14 @@ bool CheckKernel(CBlockIndex* pindexPrev, unsigned int nBits, int64_t nTime, con
         return false;
 
     int nDepth;
+    int nStakeMinConfirmations = 0;
+
+    if(pindexBest->nHeight >= HARD_FORK_BLOCK){
+        nStakeMinConfirmations = 1440;
+    } else {
+        nStakeMinConfirmations = 1250;
+    }
+
 
     if (IsConfirmedInNPrevBlocks(txindex, pindexPrev, nStakeMinConfirmations - 1, nDepth))
         return false;

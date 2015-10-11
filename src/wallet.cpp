@@ -1529,6 +1529,7 @@ void CWallet::AvailableCoinsForStaking(vector<COutput>& vCoins, unsigned int nSp
 
     {
         LOCK2(cs_main, cs_wallet);
+	int nStakeMinConfirmations = 0;
         for (map<uint256, CWalletTx>::const_iterator it = mapWallet.begin(); it != mapWallet.end(); ++it)
         {
             const CWalletTx* pcoin = &(*it).second;
@@ -1537,10 +1538,10 @@ void CWallet::AvailableCoinsForStaking(vector<COutput>& vCoins, unsigned int nSp
             if (nDepth < 1)
                 continue;
 
-            if(nHeight >= 85000){
-                int nStakeMinConfirmations = 1440;
+            if(pindexBest->nHeight >= HARD_FORK_BLOCK){
+                nStakeMinConfirmations = 1440;
             } else {
-                int nStakeMinConfirmations = 1250;
+                nStakeMinConfirmations = 1250;
             }
 
             if (nDepth < nStakeMinConfirmations)
@@ -3356,6 +3357,13 @@ uint64_t CWallet::GetStakeWeight() const
     CTxDB txdb("r");
 
     LOCK2(cs_main, cs_wallet);
+    int nStakeMinConfirmations = 0;
+    if(pindexBest->nHeight >= HARD_FORK_BLOCK){
+      nStakeMinConfirmations = 1440;
+    } else {
+      nStakeMinConfirmations = 1250;
+    }
+
     BOOST_FOREACH(PAIRTYPE(const CWalletTx*, unsigned int) pcoin, setCoins)
     {
         CTxIndex txindex;

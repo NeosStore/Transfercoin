@@ -1288,7 +1288,7 @@ bool EvalScript(vector<vector<unsigned char> >& stack, const CScript& script, co
                             return false;
 
                         // Check signature
-                        bool fOk = CheckSignatureEncoding(vchSig) && CheckPubKeyEncoding(vchPubKey) &&
+                        bool fOk = CheckSignatureEncoding(vchSig, flags) && CheckPubKeyEncoding(vchPubKey) &&
                             CheckSig(vchSig, vchPubKey, scriptCode, txTo, nIn, nHashType, flags);
 
                         if (fOk)

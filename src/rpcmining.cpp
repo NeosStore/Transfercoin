@@ -120,15 +120,16 @@ Value getstakinginfo(const Array& params, bool fHelp)
             "Returns an object containing staking-related information.");
 
     uint64_t nWeight = 0;
+    uint64_t nExpectedTime = 0;
     if (pwalletMain)
         nWeight = pwalletMain->GetStakeWeight();
 
     uint64_t nNetworkWeight = GetPoSKernelPS();
     bool staking = nLastCoinStakeSearchInterval && nWeight;
-    if(nHeight <= 85000){
-        uint64_t nExpectedTime = staking ? (TARGET_SPACING_FORK * nNetworkWeight / nWeight) : 0;
+    if(pindexBest->nHeight <= HARD_FORK_BLOCK){
+        nExpectedTime = staking ? (TARGET_SPACING_FORK * nNetworkWeight / nWeight) : 0;
     } else {
-        uint64_t nExpectedTime = staking ? (TARGET_SPACING * nNetworkWeight / nWeight) : 0;
+        nExpectedTime = staking ? (TARGET_SPACING * nNetworkWeight / nWeight) : 0;
     }
 
     Object obj;
