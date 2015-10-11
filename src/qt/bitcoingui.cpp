@@ -24,6 +24,7 @@
 #include "net.h"
 #include "txdb.h"
 #include "txmempool.h"
+#include "init.h"
 
 #include "editaddressdialog.h"
 #include "optionsmodel.h"
