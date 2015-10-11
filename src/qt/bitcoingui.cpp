@@ -25,7 +25,9 @@
 #include "txdb.h"
 #include "txmempool.h"
 #include "init.h"
-
+#include "chainparams.h"            
+#include "checkpoints.h"
+ 
 #include "editaddressdialog.h"
 #include "optionsmodel.h"
 #include "transactiondescdialog.h"
