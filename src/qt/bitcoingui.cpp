@@ -17,7 +17,7 @@
 #include "aboutdialog.h"
 #include "clientmodel.h"
 #include "walletmodel.h"
-#include "main.h"
+#include "kernel.h"
 #include "editaddressdialog.h"
 #include "optionsmodel.h"
 #include "transactiondescdialog.h"
