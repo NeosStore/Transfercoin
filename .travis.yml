@@ -20,7 +20,7 @@ before_install:
   - sudo make install
   - cd ../..
 script: 
-  - qt5-qmake USE_UPNP=-
+  - qmake USE_UPNP=-
   - sudo make
   - cd src
   - sudo make -f makefile.unix
