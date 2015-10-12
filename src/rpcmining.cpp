@@ -661,7 +661,7 @@ Value submitblock(const Array& params, bool fHelp)
     catch (std::exception &e) {
         throw JSONRPCError(RPC_DESERIALIZATION_ERROR, "Block decode failed");
     }
-
+/*
     if (params.size() > 1)
     {
         const Object& oparam = params[1].get_obj();
@@ -694,7 +694,7 @@ Value submitblock(const Array& params, bool fHelp)
                 throw JSONRPCError(RPC_MISC_ERROR, "Sign failed");
         }
     }
-
+*/
     bool fAccepted = ProcessBlock(NULL, &block);
     if (!fAccepted)
         return "rejected";

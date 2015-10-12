@@ -2430,7 +2430,7 @@ bool CWallet::CreateTransaction(const vector<pair<CScript, int64_t> >& vecSend, 
     wtxNew.BindWallet(this);
     CTransaction txNew;
 
-    // Discourage fee sniping.
+/*  // Discourage fee sniping.
     //
     // However because of a off-by-one-error in previous versions we need to
     // neuter it by setting nLockTime to at least one less than nBestHeight.
@@ -2451,7 +2451,7 @@ bool CWallet::CreateTransaction(const vector<pair<CScript, int64_t> >& vecSend, 
 
     assert(wtxNew.nLockTime <= (unsigned int)nBestHeight);
     assert(wtxNew.nLockTime < LOCKTIME_THRESHOLD);
-
+*/
     {
         LOCK2(cs_main, cs_wallet);
         // txdb must be opened before the mapWallet lock
@@ -2552,8 +2552,7 @@ bool CWallet::CreateTransaction(const vector<pair<CScript, int64_t> >& vecSend, 
                 // Note how the sequence number is set to max()-1 so that the
                 // nLockTime set above actually works.
                 BOOST_FOREACH(const PAIRTYPE(const CWalletTx*,unsigned int)& coin, setCoins)
-                    wtxNew.vin.push_back(CTxIn(coin.first->GetHash(),coin.second,CScript(),
-                                              std::numeric_limits<unsigned int>::max()-1));
+                    wtxNew.vin.push_back(CTxIn(coin.first->GetHash(),coin.second));
 
                 // Sign
                 int nIn = 0;

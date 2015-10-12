@@ -135,9 +135,9 @@ enum
     // a mandatory flag applied to scripts in a block. NOPs that are not
     // executed, e.g.  within an unexecuted IF ENDIF block, are *not* rejected.
     SCRIPT_VERIFY_DISCOURAGE_UPGRADABLE_NOPS  = (1U << 7),
-    SCRIPT_VERIFY_ALLOW_EMPTY_SIG = (1U << 8),
-    SCRIPT_VERIFY_FIX_HASHTYPE = (1U << 9),
-    SCRIPT_VERIFY_CHECKLOCKTIMEVERIFY = (1U << 10)
+    //SCRIPT_VERIFY_ALLOW_EMPTY_SIG = (1U << 8),
+    //SCRIPT_VERIFY_FIX_HASHTYPE = (1U << 9),
+    //SCRIPT_VERIFY_CHECKLOCKTIMEVERIFY = (1U << 10)
 };
 
 // Mandatory script verification flags that all new blocks must comply with for
@@ -145,15 +145,16 @@ enum
 //
 // Failing one of these tests may trigger a DoS ban - see ConnectInputs() for
 // details.
-static const unsigned int MANDATORY_SCRIPT_VERIFY_FLAGS = SCRIPT_VERIFY_NULLDUMMY |
-                                                          SCRIPT_VERIFY_STRICTENC |
-                                                          SCRIPT_VERIFY_CHECKLOCKTIMEVERIFY;
+static const unsigned int MANDATORY_SCRIPT_VERIFY_FLAGS = SCRIPT_VERIFY_NONE;
 
 // Standard script verification flags that standard transactions will comply
 // with. However scripts violating these flags may still be present in valid
 // blocks and we must accept those blocks.
 static const unsigned int STANDARD_SCRIPT_VERIFY_FLAGS = MANDATORY_SCRIPT_VERIFY_FLAGS |
-                                                         SCRIPT_VERIFY_DISCOURAGE_UPGRADABLE_NOPS;
+                                                         SCRIPT_VERIFY_DISCOURAGE_UPGRADABLE_NOPS |
+                                                         SCRIPT_VERIFY_NULLDUMMY |
+                                                         SCRIPT_VERIFY_STRICTENC |
+                                                         SCRIPT_VERIFY_CHECKLOCKTIMEVERIFY;
 
 // For convenience, standard but not mandatory verify flags.
 static const unsigned int STANDARD_NOT_MANDATORY_VERIFY_FLAGS = STANDARD_SCRIPT_VERIFY_FLAGS & ~MANDATORY_SCRIPT_VERIFY_FLAGS;
@@ -953,7 +954,7 @@ public:
 
 
 bool IsDERSignature(const valtype &vchSig, bool haveHashType = true);
-bool IsCompressedOrUncompressedPubKey(const valtype &vchPubKey);
+//bool IsCompressedOrUncompressedPubKey(const valtype &vchPubKey);
 bool EvalScript(std::vector<std::vector<unsigned char> >& stack, const CScript& script, const CTransaction& txTo, unsigned int nIn, unsigned int flags, int nHashType);
 bool EvalScript(std::vector<std::vector<unsigned char> >& stack, const CScript& script, unsigned int flags, const BaseSignatureChecker& checker, ScriptError* error = NULL);
 bool Solver(const CScript& scriptPubKey, txnouttype& typeRet, std::vector<std::vector<unsigned char> >& vSolutionsRet);
