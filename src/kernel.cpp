@@ -133,7 +133,7 @@ bool ComputeNextStakeModifier(const CBlockIndex* pindexPrev, uint64_t& nStakeMod
     if(pindexBest->nHeight >= HARD_FORK_BLOCK){
         vSortedByTimestamp.reserve(64 * nModifierInterval / TARGET_SPACING_FORK);
     } else {
-        vSortedByTimestamp.reserve(64 * nModifierInterval / TARGET_SPACING);
+        vSortedByTimestamp.reserve(64 * nModifierInterval / GetTargetSpacing(pindexPrev->nHeight));
     }
 
     int64_t nSelectionInterval = GetStakeModifierSelectionInterval();
