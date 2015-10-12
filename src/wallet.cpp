@@ -3361,7 +3361,7 @@ uint64_t CWallet::GetStakeWeight() const
     if(pindexBest->nHeight >= HARD_FORK_BLOCK){
       nStakeMinConfirmations = 1440;
     } else {
-      nStakeMinConfirmations = 1250;
+      nStakeMinConfirmations = 1000;
     }
 
     BOOST_FOREACH(PAIRTYPE(const CWalletTx*, unsigned int) pcoin, setCoins)
