@@ -392,9 +392,9 @@ static bool CheckStakeKernelHashV2(CBlockIndex* pindexPrev, unsigned int nBits, 
     // Now check if proof-of-stake hash meets target protocol
     if (CBigNum(hashProofOfStake) > bnTarget){
         if (fDebug){
-            LogPrintf("CheckStakeKernelHash() : Proof of Stake hash doesnt meet target protocol hashProofOfStake=%d bnTarget=%d\n",
-                hashProofOfStake,
-                bnTarget
+            LogPrintf("CheckStakeKernelHash() : Proof of Stake hash doesnt meet target protocol hashProofOfStake=%s bnTarget=%s\n",
+                hashProofOfStake.ToString(),
+                bnTarget.ToString()
             );
         }
         return false;
