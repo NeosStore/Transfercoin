@@ -2820,10 +2820,10 @@ bool CBlock::CheckBlockSignature() const
     if (!IsCompressedOrUncompressedPubKey(vchPushValue))
         return false;
     return CPubKey(vchPushValue).Verify(GetHash(), vchBlockSig);
-    
+    */
     return false;
 }
-*/
+
 bool CheckDiskSpace(uint64_t nAdditionalBytes)
 {
     uint64_t nFreeBytesAvailable = filesystem::space(GetDataDir()).available;
