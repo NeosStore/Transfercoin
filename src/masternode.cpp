@@ -24,6 +24,8 @@ map<uint256, int> mapSeenMasternodeScanningErrors;
 std::map<CNetAddr, int64_t> askedForMasternodeList;
 // which masternodes we've asked for
 std::map<COutPoint, int64_t> askedForMasternodeListEntry;
+// which masternodes we've asked for
+std::map<int, CScript> cacheBlockPayee;
 // cache block hashes as we calculate them
 std::map<int64_t, uint256> mapCacheBlockHashes;
 
@@ -373,6 +375,20 @@ void ProcessMessageMasternode(CNode* pfrom, std::string& strCommand, CDataStream
         if(masternodePayments.AddWinningMasternode(winner)){
             masternodePayments.Relay(winner);
         }
+        if(chainActive.Tip()){
+            //cache payments
+            int success = 0;
+            int fail = 0;
+            for(int nBlockHeight = chainActive.Tip()->nHeight; nBlockHeight < chainActive.Tip()->nHeight+10; nBlockHeight++){
+                CScript payee;
+                if(masternodePayments.GetBlockPayee(nBlockHeight, payee)){
+                    success++;
+                } else {
+                    fail++;
+                }
+            }
+            LogPrintf("mnw - cached block payees - success %d fail %d\n", success, fail);
+        }
     }
 }
 
@@ -671,9 +687,17 @@ uint64_t CMasternodePayments::CalculateScore(uint256 blockHash, CTxIn& vin)
 
 bool CMasternodePayments::GetBlockPayee(int nBlockHeight, CScript& payee)
 {
+
+    // if it's cached, use it
+    if(cacheBlockPayee.count(nBlockHeight)){
+        payee = cacheBlockPayee[nBlockHeight];
+        return true;
+    }
+
     BOOST_FOREACH(CMasternodePaymentWinner& winner, vWinning){
         if(winner.nBlockHeight == nBlockHeight) {
             payee = winner.payee;
+            cacheBlockPayee.insert(make_pair(nBlockHeight, payee));
             return true;
         }
     }
