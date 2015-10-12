@@ -369,8 +369,12 @@ static bool CheckStakeKernelHashV2(CBlockIndex* pindexPrev, unsigned int nBits, 
 
     // Calculate hash
     CDataStream ss(SER_GETHASH, 0);
+    if(pindexBest->nHeight >= HARD_FORK_BLOCK){
         ss << bnStakeModifierV2;
-    
+    else {
+        ss << nStakeModifier << nTimeBlockFrom << txPrev.nTime << prevout.hash << prevout.n << nTimeTx;
+        hashProofOfStake = Hash(ss.begin(), ss.end());
+    }
     if (fPrintProofOfStake)
     {
         LogPrintf("CheckStakeKernelHash() : using modifier 0x%016x at height=%d timestamp=%s for block from timestamp=%s\n",
