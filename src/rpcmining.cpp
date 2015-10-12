@@ -129,7 +129,7 @@ Value getstakinginfo(const Array& params, bool fHelp)
     if(pindexBest->nHeight <= HARD_FORK_BLOCK){
         nExpectedTime = staking ? (TARGET_SPACING_FORK * nNetworkWeight / nWeight) : 0;
     } else {
-        uint64_t nExpectedTime = staking ? (GetTargetSpacing(nBestHeight) * nNetworkWeight / nWeight) : 0;
+        nExpectedTime = staking ? (GetTargetSpacing(nBestHeight) * nNetworkWeight / nWeight) : 0;
     }
 
     Object obj;
