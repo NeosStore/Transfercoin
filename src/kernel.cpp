@@ -388,8 +388,10 @@ static bool CheckStakeKernelHashV2(CBlockIndex* pindexPrev, unsigned int nBits, 
     }
 
     // Now check if proof-of-stake hash meets target protocol
-    if (CBigNum(hashProofOfStake) > bnTarget)
+    if (CBigNum(hashProofOfStake) > bnTarget){
+        if (fDebug){LogPrintf("CheckStakeKernelHash() : Proof of Stake hash doesnt meet target protocol");}
         return false;
+    }
 
     if (fDebug && !fPrintProofOfStake)
     {
