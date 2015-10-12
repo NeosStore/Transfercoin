@@ -370,8 +370,10 @@ static bool CheckStakeKernelHashV2(CBlockIndex* pindexPrev, unsigned int nBits, 
     // Calculate hash
     CDataStream ss(SER_GETHASH, 0);
     if(pindexBest->nHeight >= HARD_FORK_BLOCK){
+        if (fDebug){LogPrintf("CheckStakeKernelHash() : Using new staking protocol\n");}
         ss << bnStakeModifierV2;
     } else {
+        if (fDebug){LogPrintf("CheckStakeKernelHash() : Using old staking protocol\n");}
         ss << nStakeModifier << nTimeBlockFrom << txPrev.nTime << prevout.hash << prevout.n << nTimeTx;
         hashProofOfStake = Hash(ss.begin(), ss.end());
     }
