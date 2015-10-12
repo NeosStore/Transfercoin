@@ -47,7 +47,6 @@ void ProcessMessageMasternode(CNode* pfrom, std::string& strCommand, CDataStream
 {
 
     if (strCommand == "dsee") { //DarkSend Election Entry
-        if(fLiteMode) return; //disable all darksend/masternode related functionality
 
         bool fIsInitialDownload = IsInitialBlockDownload();
         if(fIsInitialDownload) return;
