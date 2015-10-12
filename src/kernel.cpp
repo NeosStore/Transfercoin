@@ -444,12 +444,11 @@ bool CheckProofOfStake(CBlockIndex* pindexPrev, const CTransaction& tx, unsigned
     int nDepth;
     if(pindexBest->nHeight >= HARD_FORK_BLOCK){
         nStakeMinConfirmations = 1440;
+        if (IsConfirmedInNPrevBlocks(txindex, pindexPrev, nStakeMinConfirmations - 1, nDepth))
+            return tx.DoS(100, error("CheckProofOfStake() : tried to stake at depth %d", nDepth + 1));
     } else {
         nStakeMinConfirmations = 1250;
     }
-
-    if (IsConfirmedInNPrevBlocks(txindex, pindexPrev, nStakeMinConfirmations - 1, nDepth))
-        return tx.DoS(100, error("CheckProofOfStake() : tried to stake at depth %d", nDepth + 1));
     
     if (!CheckStakeKernelHash(pindexPrev, nBits, block, txindex.pos.nTxPos - txindex.pos.nBlockPos, txPrev, txin.prevout, tx.nTime, hashProofOfStake, targetProofOfStake, fDebug))
         return tx.DoS(1, error("CheckProofOfStake() : INFO: check kernel failed on coinstake %s, hashProof=%s", tx.GetHash().ToString(), hashProofOfStake.ToString())); // may occur during initial download or if behind on block chain sync
