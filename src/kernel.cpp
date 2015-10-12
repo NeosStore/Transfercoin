@@ -447,7 +447,7 @@ bool CheckProofOfStake(CBlockIndex* pindexPrev, const CTransaction& tx, unsigned
         if (IsConfirmedInNPrevBlocks(txindex, pindexPrev, nStakeMinConfirmations - 1, nDepth))
             return tx.DoS(100, error("CheckProofOfStake() : tried to stake at depth %d", nDepth + 1));
     } else {
-        nStakeMinConfirmations = 1250;
+        nStakeMinConfirmations = 1000;
     }
     
     if (!CheckStakeKernelHash(pindexPrev, nBits, block, txindex.pos.nTxPos - txindex.pos.nBlockPos, txPrev, txin.prevout, tx.nTime, hashProofOfStake, targetProofOfStake, fDebug))
@@ -485,13 +485,11 @@ bool CheckKernel(CBlockIndex* pindexPrev, unsigned int nBits, int64_t nTime, con
 
     if(pindexBest->nHeight >= HARD_FORK_BLOCK){
         nStakeMinConfirmations = 1440;
+        if (IsConfirmedInNPrevBlocks(txindex, pindexPrev, nStakeMinConfirmations - 1, nDepth))
+            return false;
     } else {
-        nStakeMinConfirmations = 1250;
+        nStakeMinConfirmations = 1000;
     }
-
-
-    if (IsConfirmedInNPrevBlocks(txindex, pindexPrev, nStakeMinConfirmations - 1, nDepth))
-        return false;
 
     if (pBlockTime)
         *pBlockTime = block.GetBlockTime();

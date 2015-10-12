@@ -2185,7 +2185,7 @@ bool CTransaction::GetCoinAge(CTxDB& txdb, const CBlockIndex* pindexPrev, uint64
 	if(pindexBest->nHeight >= HARD_FORK_BLOCK) {
           nStakeMinConfirmations = 1440;
         } else {
-          nStakeMinConfirmations = 1250;
+          nStakeMinConfirmations = 1000;
         }
 
         if (IsConfirmedInNPrevBlocks(txindex, pindexPrev, nStakeMinConfirmations - 1, nSpendDepth))
