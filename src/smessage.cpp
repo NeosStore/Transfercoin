@@ -2977,7 +2977,7 @@ int SecureMsgStore(uint8_t *pHeader, uint8_t *pPayload, uint32_t nPayload, bool 
 
         
     };
-    AssertLockHeld(cs_smsg);
+    
     
     if (!pHeader
         || !pPayload)
